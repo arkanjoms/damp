@@ -1,0 +1,29 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+  httpd-php5:
+    image: php:5-apache
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ~/workspace/www:/var/www/html
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    links:
+      - mysql:db
+    ports:
+      - "8088:80"
+volumes:
+  mysqldata:
